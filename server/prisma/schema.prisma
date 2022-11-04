@@ -26,14 +26,14 @@ model Pool {
   ownerId String?
 
   owner        User?         @relation(fields: [ownerId], references: [id])
-  Participants Participant[]
+  participants Participant[]
 }
 
 model Participant {
-  id     String @id @default(cuid())
+  id     String  @id @default(cuid())
   userId String
   poolId String
-  guess Guess[]
+  guess  Guess[]
 
   user User @relation(fields: [userId], references: [id])
   pool Pool @relation(fields: [poolId], references: [id])
@@ -62,7 +62,7 @@ model Game {
   date                  DateTime
   firstTeamCountryCode  String
   secondTeamCountryCode String
-  guess                 Guess[]
+  guesses                 Guess[]
 }
 
 //palpite
