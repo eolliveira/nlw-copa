@@ -2,7 +2,8 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
-import z from 'zod';
+import z from "zod";
+import ShortUniqueId from "short-unique-id";
 
 //log de sql
 const prisma = new PrismaClient({
@@ -25,39 +26,29 @@ async function bootstrap() {
     return { count };
   });
 
-
-
-
-
   //criar bolão
   fastify.post("/pools", async (request, reply) => {
-
-    //define que pool é um obj 
+    //define que pool é um obj
     const createPoolBody = z.object({
       //title tipo string e não é nulo
       title: z.string(),
-    })
+    });
 
     //retorna resposta , passando pela validação
-    const { title } = createPoolBody.parse(request.body)
+    const { title } = createPoolBody.parse(request.body);
 
+    const generate = new ShortUniqueId({ length: 6 });
+    const code = String(generate()).toUpperCase();
 
+    await prisma.pool.create({
+      data: {
+        title,
+        code,
+      },
+    });
 
-
-
-
-
-    return reply.status(201).send({ title });
+    return reply.status(201).send({ code });
   });
-
-
-
-
-
-
-
-
-
 
   await fastify.listen({ port: 8080 });
 }
