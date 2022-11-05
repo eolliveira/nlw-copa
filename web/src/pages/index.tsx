@@ -3,7 +3,7 @@ interface HomeProps {
 }
 
 export default function Home(props: HomeProps) {
-  return <h1 className="text-purple-700">{`Contagem: ${props.count}`}</h1>;
+  return <h1 className=" text-lg font-bold text-violet-500" >{`Contagem: ${props.count}`}</h1>;
 }
 
 //ServerSiteRendering = renderização e construção visual no node
