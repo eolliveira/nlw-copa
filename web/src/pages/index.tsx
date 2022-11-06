@@ -3,9 +3,15 @@ import AppNlwCopaPreview from "../assets/app-nlw-copa-preview.png";
 import LogoApp from "../assets/logo.svg";
 import UsersAvatars from "../assets/users-avatar-example.png";
 import IconCheck from "../assets/icon-check.svg";
+import { api } from "../lib/axios";
 
 
-export default function Home() {
+interface HomeProps {
+  poolCount: number,
+  guessesCount: number
+}
+
+export default function Home( props : HomeProps) {
   return (
     <div className="max-w-[1124px] mx-auto grid grid-cols-2 gap-28 h-screen items-center " >
       <main>
@@ -34,7 +40,7 @@ export default function Home() {
           <div className="flex items-center gap-6"> 
             <Image quality={100} src={IconCheck} alt={"icone check"}></Image>
             <span className="flex flex-col">
-              <strong>+2.034</strong>
+              <strong>+{props.poolCount}</strong>
               <p>Bolões criados</p>
             </span>
           </div>
@@ -44,7 +50,7 @@ export default function Home() {
           <div className="flex items-center gap-6">
             <Image quality={100} src={IconCheck} alt={"icone check" }></Image>
             <span className="flex flex-col">
-              <strong>+2.034</strong>
+              <strong>+{props.guessesCount}</strong>
               <p>Palpites enviados</p>
             </span>
           </div>
@@ -58,14 +64,13 @@ export default function Home() {
 
 //ServerSiteRendering = renderização e construção visual no node
 export const getServerSideProps = async () => {
-  const response = await fetch("http://localhost:8080/pools/count");
-  const data = await response.json();
-
-  console.log(data);
+  const poolCountResponse = await api.get("pools/count");
+  const guessesCountResponse = await api.get("guesses/count");
 
   return {
     props: {
-      count: data.count,
+      poolCount: poolCountResponse.data.count,
+      guessesCount: guessesCountResponse.data.count 
     },
   };
 };
