@@ -9,6 +9,7 @@ import { api } from "../lib/axios";
 interface HomeProps {
   poolCount: number,
   guessesCount: number
+  usersCount: number
 }
 
 export default function Home( props : HomeProps) {
@@ -22,7 +23,7 @@ export default function Home( props : HomeProps) {
         <div className="mt-10 flex items-center gap-2 text-white-100 text-xl ">
           <Image quality={100} src={UsersAvatars} alt={"imagem usuários"} />
           <p>
-            <span className="text-green-500" >+12.592</span> pessoas ja estão usando
+            <span className="text-green-500" >+{props.usersCount}</span> pessoas ja estão usando
           </p>
         </div>
 
@@ -64,13 +65,18 @@ export default function Home( props : HomeProps) {
 
 //ServerSiteRendering = renderização e construção visual no node
 export const getServerSideProps = async () => {
-  const poolCountResponse = await api.get("pools/count");
-  const guessesCountResponse = await api.get("guesses/count");
+  //DISPARA REQUESTS DE UMA SÓ VEZ , E AGUARDA O RETORNO DE TODAS
+  const [poolCountResponse, guessesCountResponse, usersCountResponse] = await Promise.all([
+    api.get("pools/count"),
+    api.get("guesses/count"),
+    api.get("/user/count")
+  ])
 
   return {
     props: {
       poolCount: poolCountResponse.data.count,
-      guessesCount: guessesCountResponse.data.count 
+      guessesCount: guessesCountResponse.data.count,
+      usersCount: usersCountResponse.data.count
     },
   };
 };
