@@ -3,12 +3,21 @@ import { Fontisto } from "@expo/vector-icons";
 
 import Logo from "../assets/logo.svg";
 import { Button } from "../components/Button";
+import { useAuth } from "../hooks/useAuth";
 
 export const SingnIn = () => {
+
+  //instancia o contexto dos dados do usuário
+  const { signIn, user } = useAuth();
+
+  console.log('Dados do usuário: ' + user.name + '/' + user.avatarUrl);
+  
+
   return (
     <Center flex={1} bg="gray.900" p="7">
       <Logo width={212} height={40} />
       <Button
+        onPress={signIn}
         mt="12"
         type="SECONDARY"
         title="ENTRAR COM GOOGLE"

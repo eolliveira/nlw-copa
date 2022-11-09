@@ -9,6 +9,7 @@ import {
 import { THEME } from "./src/styles/theme";
 import { Loading } from "./src/components/Loading";
 import { SingnIn } from "./src/screens/SignIn";
+import { AuthContextProvider } from "./src/contexts/AuthContext";
 
 export default function App() {
   //fontes foram carregadas no device ?
@@ -20,14 +21,16 @@ export default function App() {
 
   return (
     <NativeBaseProvider theme={THEME}>
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor="transparent"
-        //define style a partir do topo da tela
-        translucent
-      />
+      <AuthContextProvider>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="transparent"
+          //define style a partir do topo da tela
+          translucent
+        />
 
-      {fontsLoaded ? <SingnIn /> : <Loading />}
+        {fontsLoaded ? <SingnIn /> : <Loading />}
+      </AuthContextProvider>
     </NativeBaseProvider>
   );
 }
