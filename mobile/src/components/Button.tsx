@@ -5,9 +5,10 @@ interface ButtonProps extends IButtonProps {
   title: string;
 }
 
-export const Button = ({ title }: ButtonProps) => {
+//...rest , passa qual quer outra propriedade do botão como parametro
+export const Button = ({ title, ...rest }: ButtonProps) => {
   return (
-    <ButtonNativeBase>
+    <ButtonNativeBase {...rest }>
       <Text>{title}</Text>
     </ButtonNativeBase>
   );
