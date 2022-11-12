@@ -8,7 +8,7 @@ import { useAuth } from "../hooks/useAuth";
 export const SingnIn = () => {
 
   //instancia o contexto dos dados do usuário
-  const { signIn, user } = useAuth();
+  const { signIn , user } = useAuth();
 
   console.log('Dados do usuário: ' + user.name + '/' + user.avatarUrl);
   

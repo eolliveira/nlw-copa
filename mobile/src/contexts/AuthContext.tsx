@@ -19,8 +19,10 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-//prove o contexto para a aplic aplicação
+//provê o contexto para a aplicação
 export function AuthContextProvider({ children }: AuthProviderProps) {
+  
+  //compartilha função de login com toda a aplicação
   async function signIn() {
     console.log('vamos logar!');
   }
