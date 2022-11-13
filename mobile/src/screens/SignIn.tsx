@@ -9,10 +9,7 @@ export const SingnIn = () => {
 
   //instancia o contexto dos dados do usuário
   const { signIn , user } = useAuth();
-
-  console.log('Dados do usuário: ' + user.name + '/' + user.avatarUrl);
   
-
   return (
     <Center flex={1} bg="gray.900" p="7">
       <Logo width={212} height={40} />
