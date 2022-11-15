@@ -8,9 +8,8 @@ import {
 
 import { THEME } from "./src/styles/theme";
 import { Loading } from "./src/components/Loading";
-import { SingnIn } from "./src/screens/SignIn";
-import { New } from "./src/screens/New";
 import { AuthContextProvider } from "./src/contexts/AuthContext";
+import { Find } from "./src/screens/Find";
 
 export default function App() {
   //fontes foram carregadas no device ?
@@ -30,7 +29,7 @@ export default function App() {
           translucent
         />
 
-        {fontsLoaded ? <New /> : <Loading />}
+        {fontsLoaded ? <Find /> : <Loading />}
       </AuthContextProvider>
     </NativeBaseProvider>
   );
