@@ -3,7 +3,7 @@ import { Button as ButtonNativeBase, Text, IButtonProps } from "native-base";
 //extende as propriedades do botão
 interface ButtonProps extends IButtonProps {
   title: string;
-  type: "PRIMARY" | "SECONDARY";
+  type?: "PRIMARY" | "SECONDARY";
 }
 
 //...rest , passa qual quer outra propriedade do botão como parametro

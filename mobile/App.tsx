@@ -9,6 +9,7 @@ import {
 import { THEME } from "./src/styles/theme";
 import { Loading } from "./src/components/Loading";
 import { SingnIn } from "./src/screens/SignIn";
+import { New } from "./src/screens/New";
 import { AuthContextProvider } from "./src/contexts/AuthContext";
 
 export default function App() {
@@ -29,7 +30,7 @@ export default function App() {
           translucent
         />
 
-        {fontsLoaded ? <SingnIn /> : <Loading />}
+        {fontsLoaded ? <New /> : <Loading />}
       </AuthContextProvider>
     </NativeBaseProvider>
   );
