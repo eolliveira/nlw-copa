@@ -11,6 +11,7 @@ import { Loading } from "./src/components/Loading";
 import { AuthContextProvider } from "./src/contexts/AuthContext";
 import { Find } from "./src/screens/Find";
 import { Pools } from "./src/screens/Pools";
+import { SingnIn } from "./src/screens/SignIn";
 
 export default function App() {
   //fontes foram carregadas no device ?
@@ -30,7 +31,7 @@ export default function App() {
           translucent
         />
 
-        {fontsLoaded ? <Pools /> : <Loading />}
+        {fontsLoaded ? <SingnIn /> : <Loading />}
       </AuthContextProvider>
     </NativeBaseProvider>
   );
