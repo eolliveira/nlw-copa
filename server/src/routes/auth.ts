@@ -36,11 +36,11 @@ export async function authRoutes(fastify: FastifyInstance) {
 
     const userInfo = userInfoSchema.parse(userData);
 
-    //verifica se usuário ja existe no banco de dados 
+    //verifica se usuário ja existe no banco de dados
     let user = await prisma.user.findUnique({
-        where: {
-          googleId: userInfo.id
-        }
+      where: {
+        googleId: userInfo.id,
+      },
     });
 
     //cria usuário se não existir
@@ -50,11 +50,24 @@ export async function authRoutes(fastify: FastifyInstance) {
           googleId: userInfo.id,
           name: userInfo.name,
           email: userInfo.email,
-          avatarUrl: userInfo.picture
-        }
-      })
+          avatarUrl: userInfo.picture,
+        },
+      });
     }
 
-    return { userInfo };
+    //gera token adicionando informações ao mesmo
+    const token = fastify.jwt.sign(
+      {
+        name: userInfo.name,
+        picture: userInfo.picture,
+      },
+      {
+        //quem gerou o token
+        sub: userInfo.id,
+        expiresIn: "1 day",
+      }
+    );
+
+    return { token };
   });
 }

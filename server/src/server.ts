@@ -5,6 +5,7 @@ import { gameRoutes } from "./routes/game";
 import { userRoutes } from "./routes/user";
 import { authRoutes } from "./routes/auth";
 import { guessRoutes } from "./routes/guess";
+import jwt from "@fastify/jwt";
 
 async function bootstrap() {
   const fastify = Fastify({
@@ -14,6 +15,12 @@ async function bootstrap() {
   //define o cors da aplicação como publico
   await fastify.register(cors, {
     origin: true,
+  });
+
+
+  //criar variavel de teste em produção 
+  await fastify.register(jwt, {
+    secret: 'nlwcopa'
   });
 
   //registra rotas
