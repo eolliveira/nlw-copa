@@ -1,16 +1,29 @@
 import { FastifyInstance } from "fastify";
 import z from "zod";
 import { prisma } from "../lib/prisma";
+import { authenticate } from "../plugins/authenticate";
 
 export async function authRoutes(fastify: FastifyInstance) {
-  fastify.post("/users", async (response) => {
+  //obetem informações do usuário atraves do token
+  fastify.get(
+    "/me",
+    //antes de fazer req, verifica se token é valido
+    {
+      onRequest: [authenticate],
+    },
+    async (request) => {
+      return { user: request.user };
+    }
+  );
+
+  fastify.post("/users", async (request) => {
     //verifica se retorna um token
     const createUserBody = z.object({
       //passa o token vindo do app
       access_token: z.string(),
     });
 
-    const { access_token } = createUserBody.parse(response.body);
+    const { access_token } = createUserBody.parse(request.body);
 
     //comunica com api do google(obtem dados do usuário)
     const userResponse = await fetch(
@@ -58,12 +71,12 @@ export async function authRoutes(fastify: FastifyInstance) {
     //gera token adicionando informações ao mesmo
     const token = fastify.jwt.sign(
       {
-        name: userInfo.name,
-        picture: userInfo.picture,
+        name: user.name,
+        picture: user.avatarUrl,
       },
       {
         //quem gerou o token
-        sub: userInfo.id,
+        sub: user.id,
         expiresIn: "1 day",
       }
     );
