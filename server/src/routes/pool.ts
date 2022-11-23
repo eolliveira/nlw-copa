@@ -24,12 +24,36 @@ export async function poolRoutes(fastify: FastifyInstance) {
     const generate = new ShortUniqueId({ length: 6 });
     const code = String(generate()).toUpperCase();
 
-    await prisma.pool.create({
-      data: {
-        title,
-        code,
-      },
-    });
+    //se usuário não estiver altenticado(app web) , vai criar bolão sem owner
+    //se estiver altenticado(app mobile) cria bolão com owner , e adiciona como participante
+
+    try {
+      await request.jwtVerify();
+      //usuário altenticado
+
+      await prisma.pool.create({
+        data: {
+          title,
+          code,
+          //pega o id do usuário contido dentro dentro do token passado na requisição
+          ownerId: request.user.sub,
+          participants: {
+            create: {
+              userId: request.user.sub,
+            },
+          },
+        },
+      });
+    } catch (error) {
+      //usuário não altenticado
+
+      await prisma.pool.create({
+        data: {
+          title,
+          code,
+        },
+      });
+    }
 
     return reply.status(201).send({ code });
   });

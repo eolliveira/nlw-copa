@@ -4,7 +4,8 @@ import { prisma } from "../lib/prisma";
 import { authenticate } from "../plugins/authenticate";
 
 export async function authRoutes(fastify: FastifyInstance) {
-  //obetem informações do usuário atraves do token
+
+  //obtem informações do usuário atraves do token
   fastify.get(
     "/me",
     //antes de fazer req, verifica se token é valido
