@@ -125,4 +125,47 @@ export async function poolRoutes(fastify: FastifyInstance) {
       return reply.status(201).send();
     }
   );
+
+  fastify.get(
+    "/pools",
+    { onRequest: [authenticate] },
+    async (request, reply) => {
+      const pools = await prisma.pool.findMany({
+        where: {
+          participants: {
+            //onde pelo menos 1
+            some: {
+              userId: request.user.sub,
+            },
+          },
+        },
+        include: {
+          owner: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          _count: {
+            select: {
+              participants: true,
+            },
+          },
+          participants: {
+            take: 4,
+            select: {
+              id: true,
+              user: {
+                select: {
+                  avatarUrl: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return { pools };
+    }
+  );
 }
