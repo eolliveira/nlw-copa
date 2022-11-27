@@ -1,9 +1,11 @@
 import { FastifyInstance } from "fastify";
 import { prisma } from "../lib/prisma";
-import z from "zod";
+import z, { oboolean } from "zod";
 import ShortUniqueId from "short-unique-id";
+import { authenticate } from "../plugins/authenticate";
 
 export async function poolRoutes(fastify: FastifyInstance) {
+  //retonar numero de bolões criados
   fastify.get("/pools/count", async () => {
     const count = await prisma.pool.count();
 
@@ -45,7 +47,7 @@ export async function poolRoutes(fastify: FastifyInstance) {
         },
       });
     } catch (error) {
-      //usuário não altenticado
+      //usuário não alt enticado
 
       await prisma.pool.create({
         data: {
@@ -57,4 +59,70 @@ export async function poolRoutes(fastify: FastifyInstance) {
 
     return reply.status(201).send({ code });
   });
+
+  //inclui novo participante
+  fastify.post(
+    "/pools/:id/join",
+    {
+      onRequest: [authenticate],
+    },
+    async (request, reply) => {
+      const joinPoolBody = z.object({
+        //title tipo string e não é nulo
+        code: z.string(),
+      });
+
+      const { code } = joinPoolBody.parse(request.body);
+
+      ///verifica se bolão existe
+      const pool = await prisma.pool.findUnique({
+        where: {
+          code,
+        },
+        include: {
+          participants: {
+            where: {
+              userId: request.user.sub,
+            },
+          },
+        },
+      });
+
+      //se bolão não existir
+      if (!pool) {
+        return reply.status(400).send({
+          message: "Pool not found!",
+        });
+      }
+
+      //verifica se usuário logado ja faz parte do bolão
+      if (pool.participants.length > 0) {
+        return reply.status(400).send({
+          message: "User is already included in the pool",
+        });
+      }
+
+      //se o bolão foi criado pela web sem dono, o primeiro participante será o dono(medida alternativa)
+      if (!pool.ownerId) {
+        await prisma.pool.update({
+          where: {
+            id: pool.id,
+          },
+          data: {
+            ownerId: request.user.sub,
+          },
+        });
+      }
+
+      //inclui participante
+      await prisma.participant.create({
+        data: {
+          poolId: pool.id,
+          userId: request.user.sub,
+        },
+      });
+
+      return reply.status(201).send();
+    }
+  );
 }
