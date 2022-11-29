@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { prisma } from "../lib/prisma";
-import z, { oboolean } from "zod";
+import z from "zod";
 import ShortUniqueId from "short-unique-id";
 import { authenticate } from "../plugins/authenticate";
 
@@ -62,7 +62,7 @@ export async function poolRoutes(fastify: FastifyInstance) {
 
   //inclui novo participante
   fastify.post(
-    "/pools/:id/join",
+    "/pools/join",
     {
       onRequest: [authenticate],
     },
@@ -126,10 +126,12 @@ export async function poolRoutes(fastify: FastifyInstance) {
     }
   );
 
+  //retona bolões que o usuário logado esta incluido
   fastify.get(
     "/pools",
     { onRequest: [authenticate] },
-    async (request, reply) => {
+    async (request) => {
+
       const pools = await prisma.pool.findMany({
         where: {
           participants: {
@@ -152,6 +154,54 @@ export async function poolRoutes(fastify: FastifyInstance) {
             },
           },
           participants: {
+            //traz só os 4 primeiros registros
+            take: 4,
+            select: {
+              id: true,
+              user: {
+                select: {
+                  avatarUrl: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return { pools };
+    }
+  );
+
+  //detalhes de um bolão
+  fastify.get(
+    "/pools/:id",
+    { onRequest: [authenticate] },
+    async (request) => {
+      const getPoolParams = z.object({
+        id: z.string(),
+      });
+
+      //pega id passado na url
+      const { id } = getPoolParams.parse(request.params);
+
+      const pools = await prisma.pool.findUnique({
+        where: {
+          id,
+        },
+        include: {
+          owner: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          _count: {
+            select: {
+              participants: true,
+            },
+          },
+          participants: {
+            //traz só os 4 primeiros registros
             take: 4,
             select: {
               id: true,
