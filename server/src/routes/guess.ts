@@ -51,11 +51,17 @@ export async function guessRoutes(fastify: FastifyInstance) {
       const guess = await prisma.guess.findUnique({
         where: {
           participantId_gameId: {
+            participantId: participant.id,
             gameId,
-            participantId: participant.userId,
           },
         },
       });
+
+      if (guess) {
+        return reply.status(400).send({
+          message: "Voce ja palpitou neste jogo!",
+        });
+      }
 
       //procura pelo game
       const game = await prisma.game.findUnique({
