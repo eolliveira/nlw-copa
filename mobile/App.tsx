@@ -9,9 +9,7 @@ import {
 import { THEME } from "./src/styles/theme";
 import { Loading } from "./src/components/Loading";
 import { AuthContextProvider } from "./src/contexts/AuthContext";
-import { Find } from "./src/screens/Find";
-import { Pools } from "./src/screens/Pools";
-import { SingnIn } from "./src/screens/SignIn";
+import { Routes } from "./src/routes";
 
 export default function App() {
   //fontes foram carregadas no device ?
@@ -31,7 +29,7 @@ export default function App() {
           translucent
         />
 
-        {fontsLoaded ? <SingnIn /> : <Loading />}
+        {fontsLoaded ? <Routes /> : <Loading />}
       </AuthContextProvider>
     </NativeBaseProvider>
   );
