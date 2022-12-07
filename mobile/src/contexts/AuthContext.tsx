@@ -16,7 +16,7 @@ interface UserProps {
 //dados do contexto
 export interface AuthContextDataProps {
   user: UserProps;
-  isUserLoading: Boolean;
+  isUserLoading: boolean;
   signIn: () => Promise<void>;
 }
 

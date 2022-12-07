@@ -8,7 +8,7 @@ import { useAuth } from "../hooks/useAuth";
 export const SingnIn = () => {
 
   //instancia o contexto dos dados do usuário
-  const { signIn , user } = useAuth();
+  const { signIn , isUserLoading } = useAuth();
   
   return (
     <Center flex={1} bg="gray.900" p="7">
@@ -19,6 +19,12 @@ export const SingnIn = () => {
         type="SECONDARY"
         title="ENTRAR COM GOOGLE"
         leftIcon={<Icon as={Fontisto} name="google" color="white" size="md" />}
+        isLoading={isUserLoading}
+        _loading={{
+          _spinner: {
+            color: 'white'
+          }
+        }}
       />
 
       <Text mt="4" color="white" textAlign="center">
