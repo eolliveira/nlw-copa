@@ -30,7 +30,8 @@ async function bootstrap() {
   await fastify.register(userRoutes);
   await fastify.register(gameRoutes);
 
-  await fastify.listen({ port: 8080 });
+  //host: '0.0.0.0' = necessário para ambiente de desenv android 
+  await fastify.listen({ port: 8080, host: '0.0.0.0' });
 }
 
 //função start projeto
