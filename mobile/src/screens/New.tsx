@@ -32,6 +32,8 @@ export const New = () => {
         placement: "top",
         bgColor: "green.500",
       });
+
+      setTitle("");
     } catch (error) {
       console.log(error);
 
