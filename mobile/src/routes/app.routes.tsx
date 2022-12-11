@@ -5,6 +5,7 @@ import { PlusCircle, SoccerBall } from "phosphor-react-native";
 import { New } from "../screens/New";
 import { Pools } from "../screens/Pools";
 import { Find } from "../screens/Find";
+import { Details } from "../screens/Details";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -58,6 +59,13 @@ export const AppRoutes = () => {
         component={Find}
         options={{
         //remove botão da rota de navBar
+         tabBarButton: () => null,
+        }}
+      />
+      <Screen
+        name="details"
+        component={Details}
+        options={{
          tabBarButton: () => null,
         }}
       />
