@@ -6,7 +6,6 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Header } from "../components/Header";
 import { PoolPros, PoolCard } from "../components/PoolCard";
 import { Loading } from "../components/Loading";
-import { EmptyMyPoolList } from "../components/EmptyMyPoolList";
 import { api } from "../services/api";
 import { EmptyPoolList } from "../components/EmptyPoolList";
 
@@ -34,7 +33,7 @@ export const Pools = () => {
 
   useFocusEffect(
     useCallback(() => {
-      //executa ha foco na tela(useCallback para performasse)
+      //executa ha foco na tela(useCallback para performace)
       fetchPools();
     }, [])
   );
