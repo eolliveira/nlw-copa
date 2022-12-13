@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import { Fontisto } from "@expo/vector-icons";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Header } from "../components/Header";
-import { PoolPros, PoolCard } from "../components/PoolCard";
+import { PoolProps, PoolCard } from "../components/PoolCard";
 import { Loading } from "../components/Loading";
 import { api } from "../services/api";
 import { EmptyPoolList } from "../components/EmptyPoolList";
@@ -14,7 +14,7 @@ export const Pools = () => {
   const { navigate } = useNavigation();
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const [pools, setPools] = useState<PoolPros[]>([]);
+  const [pools, setPools] = useState<PoolProps[]>([]);
 
   async function fetchPools() {
     try {
@@ -39,7 +39,7 @@ export const Pools = () => {
   );
 
   return (
-    <VStack flex={1} bg="gray.900">
+    <VStack flex={1} bg="gray.900" pb={12} >
       <Header title="Meus bolões" />
 
       <VStack p={4}>
