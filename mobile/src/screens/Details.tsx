@@ -1,11 +1,12 @@
 import { useRoute } from "@react-navigation/native";
-import { useToast, VStack } from "native-base";
+import { HStack, useToast, VStack } from "native-base";
 import { Header } from "../components/Header";
 import { useState, useEffect } from "react";
 import { PoolProps } from "../components/PoolCard";
 import { api } from "../services/api";
 import { Loading } from "../components/Loading";
 import { PoolHeader } from "../components/PoolHeader";
+import { Option } from "../components/Option";
 import { EmptyMyPoolList } from "../components/EmptyMyPoolList";
 
 interface RouteParams {
@@ -17,6 +18,9 @@ export const Details = () => {
   const route = useRoute();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [optionSelected, setOptionSelected] = useState<"guesses" | "ranking">(
+    "guesses"
+  );
   const [poolDetails, setPoolDetails] = useState<PoolProps>();
 
   //pega id vindo do parametro
@@ -26,9 +30,9 @@ export const Details = () => {
     try {
       setIsLoading(true);
       const response = await api.get(`/pools/${id}`);
-      setPoolDetails(response.data.pools);
-      console.log(response.data.pools);
-      console.log("-----------------------------------------------");
+      setPoolDetails(response.data.pool);
+  
+      
     } catch (error) {
       console.log(error);
 
@@ -55,9 +59,22 @@ export const Details = () => {
       {poolDetails._count?.participants > 0 ? (
         <VStack px={5} flex={1}>
           <PoolHeader data={poolDetails} />
+
+          <HStack bgColor="gray.800" rounded="sm" mb="5" p={2}>
+            <Option
+              title="Seus palpites"
+              isSelected={optionSelected === "guesses"}
+              onPress={() => setOptionSelected("guesses")}
+            />
+            <Option
+              title="Ranking do grupo"
+              isSelected={optionSelected === "ranking"}
+              onPress={() => setOptionSelected("ranking")}
+            />
+          </HStack>
         </VStack>
       ) : (
-        <EmptyMyPoolList code={poolDetails.id} />
+        <EmptyMyPoolList code={poolDetails.code} />
       )}
     </VStack>
   );
