@@ -9,6 +9,7 @@ import { PoolHeader } from "../components/PoolHeader";
 import { Option } from "../components/Option";
 import { EmptyMyPoolList } from "../components/EmptyMyPoolList";
 import { Share } from "react-native";
+import { Guesses } from "../components/Guesses";
 
 interface RouteParams {
   id: string;
@@ -43,9 +44,9 @@ export const Details = () => {
   }
 
   async function handleCodeShare() {
-    Share.share({
-      message: poolDetails.code
-    })
+    await Share.share({
+      message: poolDetails.code,
+    });
   }
 
   useEffect(() => {
@@ -58,7 +59,12 @@ export const Details = () => {
 
   return (
     <VStack flex={1} bg="gray.900">
-      <Header title={poolDetails.title} showBackButton={true} showShareButton={true} onSheare={handleCodeShare} />
+      <Header
+        title={poolDetails?.title}
+        showBackButton={true}
+        showShareButton={true}
+        onSheare={handleCodeShare}
+      />
 
       {poolDetails?._count?.participants > 0 ? (
         <VStack px={5} flex={1}>
@@ -76,6 +82,8 @@ export const Details = () => {
               onPress={() => setOptionSelected("ranking")}
             />
           </HStack>
+
+          <Guesses poolId={poolDetails.id} />
         </VStack>
       ) : (
         <EmptyMyPoolList code={poolDetails?.code} onShare={handleCodeShare} />
