@@ -8,6 +8,7 @@ import { Loading } from "../components/Loading";
 import { PoolHeader } from "../components/PoolHeader";
 import { Option } from "../components/Option";
 import { EmptyMyPoolList } from "../components/EmptyMyPoolList";
+import { Share } from "react-native";
 
 interface RouteParams {
   id: string;
@@ -31,17 +32,20 @@ export const Details = () => {
       setIsLoading(true);
       const response = await api.get(`/pools/${id}`);
       setPoolDetails(response.data.pool);
-  
-      
     } catch (error) {
       console.log(error);
-
       toast.show({
         title: "Não foi possivel listar bolões",
       });
     } finally {
       setIsLoading(false);
     }
+  }
+
+  async function handleCodeShare() {
+    Share.share({
+      message: poolDetails.code
+    })
   }
 
   useEffect(() => {
@@ -54,9 +58,9 @@ export const Details = () => {
 
   return (
     <VStack flex={1} bg="gray.900">
-      <Header title={id} showBackButton={true} />
+      <Header title={poolDetails.title} showBackButton={true} showShareButton={true} onSheare={handleCodeShare} />
 
-      {poolDetails._count?.participants > 0 ? (
+      {poolDetails?._count?.participants > 0 ? (
         <VStack px={5} flex={1}>
           <PoolHeader data={poolDetails} />
 
@@ -74,7 +78,7 @@ export const Details = () => {
           </HStack>
         </VStack>
       ) : (
-        <EmptyMyPoolList code={poolDetails.code} />
+        <EmptyMyPoolList code={poolDetails?.code} onShare={handleCodeShare} />
       )}
     </VStack>
   );
