@@ -4,6 +4,8 @@ import * as AuthSection from "expo-auth-session";
 import * as WebBrowser from "expo-web-browser";
 import { api } from "../services/api";
 
+//lida com variaveis de ambiente - npm i dotenv babel-plugin-inline-dotenv
+
 //redirecionameto
 WebBrowser.maybeCompleteAuthSession();
 
@@ -34,8 +36,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
   const [isUserLoading, setIsUserLoading] = useState(false);
 
   const [request, response, promptAsync] = Google.useAuthRequest({
-    clientId:
-      "1077667841357-iv4u8rolfr8po0edsuckmt5jre1tfn0v.apps.googleusercontent.com",
+    clientId: process.env.CLIENT_ID,
     //retorna link de redirecionamento de autenticação do google(deve estar logado na conta expo)
     redirectUri: AuthSection.makeRedirectUri({ useProxy: true }),
     scopes: ["profile", "email"],
