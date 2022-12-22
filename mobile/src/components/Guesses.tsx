@@ -21,12 +21,51 @@ export function Guesses({ poolId }: Props) {
 
       const response = await api.get(`/pool/${poolId}/games`);
       setGames(response.data.games);
+      console.log(response.data.games);
     } catch (error) {
       toast.show({
         title: "Não foi possivel listar os jogos!",
       });
     } finally {
       setIsLoading(false);
+    }
+  }
+
+  async function handleGuessConfirm(gameId: string) {
+    try {
+      //verifica se placares foram informados
+      if (!firstTeamPoints.trim() || !secondTeamPoints.trim()) {
+        return toast.show({
+          title: "informe o placar do jogo!",
+          placement:'top',
+          bgColor: 'red.500'
+        });
+      }
+
+      await api.post(`/pools/${poolId}/games/${gameId}/guesses`, {
+        firstTeamPoints: Number(firstTeamPoints),
+        SecondTeamPoints: Number(secondTeamPoints),
+      });
+
+      toast.show({
+        title: "Palpite realizado com sucesso!",
+      });
+
+      fetchGames();
+    } catch (error) {
+      console.log(error);
+      
+      if (error.response?.data?.message === "Palpites para esse jogo, ja foram encerradas") {
+        toast.show({
+          title: "Palpites para esse jogo, ja foram encerrados!",
+          placement: "top",
+          bgColor: "red.500",
+        });
+      }
+
+      // toast.show({
+      //   title: "Não foi possivel fazer o palpite!",
+      // });
     }
   }
 
@@ -43,7 +82,7 @@ export function Guesses({ poolId }: Props) {
       renderItem={({ item }) => (
         <Game
           data={item}
-          onGuessConfirm={() => {}}
+          onGuessConfirm={() => handleGuessConfirm(item.id)}
           setFirstTeamPoints={setFirstTeamPoints}
           setSecondTeamPoints={setSecondTeamPoints}
         />

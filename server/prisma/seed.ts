@@ -4,8 +4,6 @@ const prisma = new PrismaClient();
 
 async function main() {
 
-
-
   const user = await prisma.user.create({
     data: {
       name: "Erick Oliveira",
@@ -30,7 +28,7 @@ async function main() {
 
   await prisma.game.create({
     data: {
-      date: "2022-09-04T02:27:29.848Z",
+      date: "2022-12-25T02:27:29.848Z",
       firstTeamCountryCode: "DE",
       secondTeamCountryCode: "BR",
     },
@@ -38,7 +36,7 @@ async function main() {
 
   await prisma.game.create({
     data: {
-      date: "2022-10-04T02:27:29.848Z",
+      date: "2022-12-25T02:27:29.848Z",
       firstTeamCountryCode: "BR",
       secondTeamCountryCode: "AR",
 
